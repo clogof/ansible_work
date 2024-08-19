@@ -1,0 +1,75 @@
+- name: My first play
+  hosts: nodes
+  tasks:
+    - name: Ping my hosts
+      tags: ttt
+      ansible.builtin.ping:
+
+    - name: Print message
+      tags: debug
+      ansible.builtin.debug:
+      # msg: Hello world
+        msg: "{{ app.title }}"
+      # notify:
+      #  - notify text
+   
+    - name: Install htop
+      # become: true
+      tags: htop
+      ansible.builtin.apt: name=htop
+      # changed_when: True
+      notify:
+       - notify text
+
+
+    # - name: write hostname using jinja2
+    #   ansible.builtin.template:
+    #      src: templates/test.j2
+    #      dest: /tmp/hostname
+
+    - name: Register loop output as a variable
+      ansible.builtin.shell: "echo {{ item }}"
+      # ansible.builtin.shell: "echo 'hello world'"
+      tags: echo
+      loop:
+        - "one"
+        - "two"
+      register: lp
+
+    - name: print lp
+      tags: print
+      ansible.builtin.debug:
+        # var: "{{ item.cmd }}"
+        msg: "{{ item.rc }}"
+      loop: "{{ lp.results }}"
+
+    - name: Show all the hosts in the inventory
+      tags: groups
+      ansible.builtin.debug:
+        msg: "{{ item }}"
+      loop: "{{ groups['nodes'] }}"
+   
+    # - name: list source
+    #   tags: ls
+    #   ansible.builtin.shell: "ls ."
+    #   # delegate_to: 127.0.0.1
+    #   register: ls
+
+    # - name: Print ls
+    #   tags: ls
+    #   ansible.builtin.debug:
+    #     var: ls.stdout_lines
+
+     # - name: LS
+     #   become: true
+     #   ansible.builtin.shell:
+     #    cmd: cat a.txt
+     #    chdir: /home/admin
+     #   register: cat
+     # 
+     # - debug: var=cat.stdout_lines
+   
+  handlers:
+   - name: notify text
+     ansible.builtin.debug:
+      msg: Hello world

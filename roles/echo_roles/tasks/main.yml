@@ -1,0 +1,12 @@
+- name: Echo role
+  ansible.builtin.shell: "echo {{ costumer_user }}" 
+  register: name
+
+- name: Debug
+  ansible.builtin.debug: 
+    var: name.stdout_lines
+  # tags: [never, debug]
+    
+# - name: Echo role
+#   become_user: admin
+#   ansible.builtin.shell: "whoami" 

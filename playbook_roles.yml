@@ -1,0 +1,9 @@
+- name: Playbook Roles
+  hosts: nodes
+  # serial: 1 # по одному серверу
+  # debugger: always
+  roles: 
+    - role: echo_roles
+      costumer_user: Anton
+    # - role: echo_roles
+    #   costumer_user: Lerochka
